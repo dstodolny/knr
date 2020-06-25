@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "lib/k&r.h"
+#include "lib/knr.h"
 
 int is_whitespace(char c);
 int trim(char line[]);

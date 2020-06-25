@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "lib/k&r.h"
+#include "lib/knr.h"
 
 void reverse(char line[]);
 
