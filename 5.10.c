@@ -1,54 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 
 #define MAXOP 100
-#define NUMBER '0'
 
-int getop(char []);
 void push(double);
 double pop(void);
 
 int
-main(int argc, char *argv)
+main(int argc, char **argv)
 {
 	int type;
 	double op2;
 	char s[MAXOP];
-	
-	while ((type = getop(s)) != EOF) {
-		switch (type) {
-		case NUMBER:
-			push(atof(s));
-			break;
-		case '+':
+
+	while (--argc > 0) {
+		argv++;
+		if (**argv == '+')
 			push(pop() + pop());
-			break;
-		case '*':
+		else if (**argv == '*')
 			push(pop() * pop());
-			break;
-		case '-':
+		else if (**argv == '-') {
 			op2 = pop();
 			push(pop() - op2);
-			break;
-		case '/':
+		} else if (**argv == '/') {
 			op2 = pop();
 			if (op2 != 0.0)
 				push(pop() / op2);
 			else
 				printf("error: zero divisor\n");
-			break;
-		case '\n':
-			printf("\t%.8g\n", pop());
-			break;
-		default:
-			printf("error: unknown command %s\n", s);
-			break;
-		}
+		} else
+			push(atof(*argv));
+
 	}
+	printf("%.8g\n", pop());
 	return 0;
 }
-
 
 #define MAXVAL 100
 
@@ -71,54 +57,4 @@ double pop(void)
 		printf("error: stack empty\n");
 		return 0.0;
 	}
-}
-
-int getch(void);
-void ungetch(int);
-
-int getop(char s[])
-{
-	if (argc > 1) {
-		return *argv++;
-	} else
-		return EOF;
-	}
-}
-//	int i, c;
-//	
-//	while ((s[0] = c = getch()) == ' ' || c == '\t')
-//		;
-//	s[1] = '\0';
-//	if (!isdigit(c) && c != '.')
-//		return c;
-//	i = 0;
-//	if (isdigit(c))
-//		while (isdigit(s[++i] = c = getch()))
-//			;
-//	if (c == '.')
-//		while (isdigit(s[++i] = c = getch()))
-//			;
-//	s[i] = '\0';
-//	if (c != EOF)
-//		ungetch(c);
-//	return NUMBER;
-//}
-
-
-#define BUFSIZE 100
-
-char buf[BUFSIZE];
-int bufp = 0;
-
-int getch(void)
-{
-	return (bufp > 0) ? buf[--bufp] : getchar();
-}
-
-void ungetch(int c)
-{
-	if (bufp >= BUFSIZE)
-		printf("ungetch: too many characters\n");
-	else
-		buf[bufp++] = c;
 }
